@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[10]:
-
-
 import os
 import cv2
 import datetime
@@ -197,10 +191,3 @@ while True:
     if "stop sensation" in user_input.lower():
         speak("Goodbye! See you again.")
         break
-
-
-# In[ ]:
-
-
-
-
