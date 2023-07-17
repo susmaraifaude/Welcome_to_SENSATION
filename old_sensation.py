@@ -1,9 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[19]:
-
-
+#Imports
 import pyttsx3
 import speech_recognition as sr
 import subprocess
@@ -13,7 +8,7 @@ import time
 import sys
 import geocoder
 
-# In[35]:
+
 
 
 def play_audio_text(text):
@@ -66,7 +61,7 @@ def get_speech_input():
     return ""
 
 
-# In[33]:
+
 
 
 def main():
@@ -98,10 +93,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
