@@ -34,8 +34,8 @@ def listen():
 
     def callback(indata, frames, time, status):
         """This is called (from a separate thread) for each audio block."""
-        if status:
-            print(status, file=sys.stderr)
+        #if status:
+            #print(status, file=sys.stderr)
         q.put(bytes(indata))
 
     with sd.RawInputStream(samplerate=samplerate, blocksize=blocksize, channels=1, dtype="int16", callback=callback):
@@ -89,21 +89,20 @@ def get_day():
 
 
 # Function to get the current location
-def get_location():
+def get_location(user_tokens=None):
     try:
-        response = requests.get('https://ipapi.co/json/')
-        data = response.json()
-        city = data['city']
-        region = data['region']
-        country = data['country_name']
-
-        if 'location' in data and 'street' in data['location']:
-            street = data['location']['street']
-            return f"You are currently in {street}, {city}, {region}, {country}"
-        else:
-            return f"You are currently in {city}, {region}, {country}"
-    except requests.exceptions.RequestException:
-        return "Sorry, I couldn't retrieve the location."
+        g = geocoder.ip('me')
+        city, region, country = g.city or "Unknown City", g.state or "Unknown Region", g.country or "Unknown Country"
+        street = g.street or "Unknown Street"
+        
+        return (
+            f"You are currently in {street}, {city}, {region}, {country}"
+            #if user_tokens and any(keyword in user_tokens for keyword in ["location", "position", "my address", "where am i now"])
+            #else ", ".join(info for info in [city, region, country] if user_tokens and info.lower() in user_tokens)
+            or "Sorry, I couldn't understand your request."
+        )
+    except Exception as e:
+        return f"Error: {e}"
 
 # Function to take a picture and save it
 def take_picture():
