@@ -48,7 +48,7 @@ nltk.download('punkt')
 
 2. **Camera Access**: For taking pictures, the code uses OpenCV (`cv2`) to access the camera. Make sure you have a camera connected to your computer, and the OpenCV library is properly installed.
 
-3. **User Picture Folder**: In the `take_picture()` function, replace `"C:/Users/Srinjoy Ghosh/Pictures/Clicked pictures"` with the path where you want to save the captured pictures.
+3. **User Picture Folder**: In the `take_picture()` function, replace `"C:/Users/Pictures/Clicked pictures"` with the path where you want to save the captured pictures.
 
 ## How to Use
 
