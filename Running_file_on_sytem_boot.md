@@ -41,7 +41,7 @@ If the Python script relies on a virtual environment, follow these steps to set 
    @reboot /path/to/your/virtualenv/bin/python /path/to/Sensation1.py >> /path/to/logfile.log 2>&1
    ```
 
-4. Save the crontab and exit the editor.
+4. Save the crontab by pressing Ctrl+X and then Y and exit the editor.
 
 5. Reboot the system, and the `cron` job will execute the Python script within the virtual environment.
 
