@@ -41,13 +41,14 @@ nltk.download('punkt')
 ## Setup
 
 1. **Vosk Language Model**: To use the Vosk speech recognition model, you need to download the appropriate model for your language. Replace `"path/vosk-model-small-en-in-0.4"` in the code with the actual path to your Vosk language model. You can download the model for your language from the Vosk GitHub repository: https://github.com/alphacep/vosk-api/tree/master/model
-Make sure you have up-to-date pip and python3 versions:
-Python version: 3.5-3.9
-pip version: 20.3 and newer.
 
-3. **Camera Access**: For taking pictures, the code uses OpenCV (`cv2`) to access the camera. Make sure you have a camera connected to your computer, and the OpenCV library is properly installed.
+- Make sure you have up-to-date pip and python3 versions:
+  **Python version**: 3.5-3.9
+  **pip version**: 20.3 and newer.
 
-4. **User Picture Folder**: In the `take_picture()` function, replace `"C:/Users/Srinjoy Ghosh/Pictures/Clicked pictures"` with the path where you want to save the captured pictures.
+2. **Camera Access**: For taking pictures, the code uses OpenCV (`cv2`) to access the camera. Make sure you have a camera connected to your computer, and the OpenCV library is properly installed.
+
+3. **User Picture Folder**: In the `take_picture()` function, replace `"C:/Users/Srinjoy Ghosh/Pictures/Clicked pictures"` with the path where you want to save the captured pictures.
 
 ## How to Use
 
