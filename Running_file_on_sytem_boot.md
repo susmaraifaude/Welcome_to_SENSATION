@@ -35,7 +35,7 @@ If the Python script relies on a virtual environment, follow these steps to set 
    which python
    ```
 
-3. Add the `cron` job specifying the virtual environment path and Python script path:
+3. Open a terminal and enter the crontab -e command to open the crontab editor and Add the `cron` job specifying the virtual environment path and Python script path:
 
    ```bash
    @reboot /path/to/your/virtualenv/bin/python /path/to/Sensation1.py >> /path/to/logfile.log 2>&1
