@@ -6,7 +6,7 @@ Sensation is a voice-controlled assistant built in Python. It can perform variou
 
 ## Dependencies
 
-Before running the code, make sure you have the following Python libraries installed:
+The following python libraries are required for the implementation:
 
 - os
 - cv2 (OpenCV)
@@ -24,8 +24,12 @@ Before running the code, make sure you have the following Python libraries insta
 - vosk
 - queue
 
+We have provided a build file that installs all the above required dependencies and runs the python program Sensation1.py automatically:
+```
+python build.py
+```
 
-You can install the required dependencies using pip:
+Alternatively, You can install the required dependencies using pip:
 
 ```
 pip install opencv-python datetime requests psutil nltk sounddevice pyttsx3 geocoder vosk
