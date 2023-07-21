@@ -14,16 +14,15 @@ import pyttsx3
 import geocoder
 from vosk import Model, KaldiRecognizer
 import queue
+import navigation # Import the navigation.py file
 
-nltk.download('punkt')
+#nltk.download('punkt')
 
 # Loading the vosk model
-model = Model("path/vosk-model-small-en-in-0.4")  # Replace "path/to/your/vosk/model" with the actual path to your Vosk language model or keep it in the same python file 
-
+model = Model("vosk-model-small-en-in-0.4")  # Replace "path/to/your/vosk/model" with the actual path to your Vosk language model or keep it in the same python file 
 
 # Initialize the recognizer and the text-to-speech engine
 engine = pyttsx3.init()
-
 
 # Function to listen to the user's voice input
 def listen():
@@ -34,8 +33,8 @@ def listen():
 
     def callback(indata, frames, time, status):
         """This is called (from a separate thread) for each audio block."""
-        #if status:
-            #print(status, file=sys.stderr)
+        if status:
+            print(status, file=sys.stderr)
         q.put(bytes(indata))
 
     with sd.RawInputStream(samplerate=samplerate, blocksize=blocksize, channels=1, dtype="int16", callback=callback):
@@ -87,22 +86,9 @@ def get_day():
     current_day = now.strftime("%A")
     return f"Today is {current_day}"
 
-
-# Function to get the current location
-def get_location(user_tokens=None):
-    try:
-        g = geocoder.ip('me')
-        city, region, country = g.city or "Unknown City", g.state or "Unknown Region", g.country or "Unknown Country"
-        street = g.street or "Unknown Street"
-        
-        return (
-            f"You are currently in {street}, {city}, {region}, {country}"
-            #if user_tokens and any(keyword in user_tokens for keyword in ["location", "position", "my address", "where am i now"])
-            #else ", ".join(info for info in [city, region, country] if user_tokens and info.lower() in user_tokens)
-            or "Sorry, I couldn't understand your request."
-        )
-    except Exception as e:
-        return f"Error: {e}"
+# Function to run the navigation file
+def get_location():
+    return navigation.get_location()
 
 # Function to take a picture and save it
 def take_picture():
@@ -111,7 +97,7 @@ def take_picture():
     camera.release()
 
     if return_value:
-        folder_path = "C:/Users/Srinjoy Ghosh/Pictures/Clicked pictures"  # Replace <your_username> with your Windows username
+        folder_path = "C:/Users/User_name/Pictures/Clicked pictures"  # Replace with your Windows username
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
 
@@ -135,8 +121,23 @@ def shutdown_system(user_tokens=None):
     else:
         return "Okay, the system will not be shut down."
 
+# Function to start navigation
+def start_navigation():
+    global navigation_running
+    navigation_running = True
+    speak("Navigation is now running.")
+
+# Function to stop navigation
+def stop_navigation():
+    global navigation_running
+    navigation_running = False
+    speak("Navigation has been stopped.")
+
 # Welcome message
 speak("Welcome to Sensation! How can I assist you?")
+
+# Variable to keep track of whether navigation is running
+navigation_running = False
 
 # A dictionary to map commands to functions
 commands = {
@@ -147,6 +148,8 @@ commands = {
     "location": get_location,
     "address": get_location,
     "where am i now": get_location,
+    "navigation": start_navigation,
+    "start navigation": start_navigation,
     "picture": take_picture,
     "photo": take_picture,
     "selfie": take_picture,
@@ -160,8 +163,10 @@ commands = {
 
 # Regular expression for matching specific commands preceded by the trigger word
 trigger_word = "sensation"
-command_pattern = re.compile(rf"(?i)\b{trigger_word}\b.*\b(?:time|date|day|position|address|location|picture|photo|selfie|shot|shut|down|turn|off|stop|city|state|country|street)\b")
-
+navigation_stop_phrase = "stop navigation"
+command_pattern = re.compile(
+    rf"(?i)\b{trigger_word}\b.*\b(?:time|date|day|position|address|location|navigation|start navigation|picture|photo|selfie|shot|shut|down|turn|off|stop|city|state|country|street|{navigation_stop_phrase})\b"
+)
 
 # Thread for clearing memory
 memory_clear_thread = threading.Thread(target=clear_memory_thread)
@@ -175,12 +180,25 @@ while True:
         speak("Sorry, I didn't understand you. Could you repeat again?")
         continue
 
+    # Check if navigation is running
+    if navigation_running:
+        if navigation_stop_phrase.lower() in user_input.lower():
+            stop_navigation()
+        else:
+            speak("Navigation already running.")
+        continue
+
     if re.search(command_pattern, user_input):
         user_tokens = word_tokenize(user_input.lower())
         for command, function in commands.items():
             if any(keyword in user_tokens for keyword in [command]):
                 response = function()
                 speak(response)
+
+                # Check if the command started navigation
+                if command == "navigation" or command == "start navigation":
+                    start_navigation()
+
                 break
         else:
             response = "Sorry, I couldn't understand your request."
